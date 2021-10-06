@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Text,
@@ -9,8 +9,22 @@ import {
 } from 'react-native';
 
 export function Home() {
+  // estado inicial e vazio
+  //const [estado, funcao] = useState('valor do estado');
+  const [newSkill, setNewSkill] = useState('');
+
+  // estado para armazenar todas as Skills
+  const [mySkills, setMySkills] = useState([]);
+
+  //handle(lidar com essa acao): usada como padrao em acoes do usuario
+  function handleAddNewSkill() {
+    // spread operator: ...
+    setMySkills(oldState => [...oldState, newSkill]);
+  }
+
+  //elementos visuais
   return (
-    <Fragment>
+    <>
       <View style={styles.container}>
         <Text style={styles.title}>Welcome, Rayza 🤹‍♂️</Text>
 
@@ -18,15 +32,25 @@ export function Home() {
           style={styles.input}
           placeholder="New skill"
           placeholderTextColor="#555"
+          onChangeText={setNewSkill}
         />
 
-        <TouchableOpacity style={styles.button} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.button}
+          activeOpacity={0.7}
+          onPress={handleAddNewSkill}>
           <Text style={styles.buttonText}>Add</Text>
         </TouchableOpacity>
 
-        <Text style={[styles.title, {marginTop: 50}]}>My skills</Text>
+        <Text style={[styles.title, {marginVertical: 50}]}>My skill</Text>
+
+        {mySkills.map(skill => (
+          <TouchableOpacity key={skill} style={styles.buttonSkill}>
+            <Text style={styles.textSkill}>{skill}</Text>
+          </TouchableOpacity>
+        ))}
       </View>
-    </Fragment>
+    </>
   );
 }
 
@@ -60,6 +84,18 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#fff',
     fontSize: 17,
+    fontWeight: 'bold',
+  },
+  buttonSkill: {
+    backgroundColor: '#1f1e25',
+    padding: 15,
+    borderRadius: 50,
+    alignItems: 'center',
+    marginVertical: 10,
+  },
+  textSkill: {
+    color: '#fff',
+    fontSize: 22,
     fontWeight: 'bold',
   },
 });
